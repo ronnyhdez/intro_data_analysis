@@ -1,0 +1,132 @@
+---
+title: "Programming with R"
+author: "Ronny A. Hernández Mora"
+date: "12/09/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# If you don´t have the packages, run the followin:
+
+# install.packages(c("dplyr", "purrr", "janitor",
+#                    "readr", "tidyr", "lubridate",
+#                    "googlesheets4", "fs"))
+
+# Load R packages
+library(dplyr)
+library(purrr)
+library(janitor)
+library(readr)
+library(tidyr)
+library(lubridate)
+library(fs)
+
+# Load internal functions
+source("R/prepare_examples.R")
+```
+
+# Reading files
+
+We can read many data files in R. There are several packages to do this and it
+depends on the file extension. 
+
+Let's prepare our data for examples. Run the following code to set your data
+example files:
+```{r prepare_examples}
+prepare_examples()
+```
+
+Now that we have our example data files (check the new folder 'data') we are
+going to read the 'principe_2015.csv' data file:
+
+```{r read_one_file}
+# Read the .csv file
+principe <- read_csv("data/principe_2015.csv")
+
+# Chech the content
+glimpse(principe)
+```
+
+Now, what happens if we need to read all the principe files?
+```{r read_many_files}
+dir_ls("data")
+
+# Create object with files of interest
+files <- dir_ls(path = "data", glob = "data/principe_*")
+```
+
+Now, we can iterate on each file to read it
+```{r iterate_read}
+read_files <- map(files, read_csv)
+```
+
+But we want one data frame, not a list
+```{r map_dataframe}
+principe <- files %>% 
+  map_dfr(~read_csv(.x))
+
+principe <- files %>% 
+  map_dfr(read_csv, .id = "file_id")
+```
+
+We can many data file types. Even we can read file directly from our google 
+drive:
+
+```{r read_from_drive}
+principe_drive <- read_sheet("1e6_LeSP9LjDBFSKvcCbM3yoUhLOCSK2_SqmkoAl7nzo")
+```
+
+# Export objects
+
+We can not only read from google sheets, we can also write to a google sheet
+
+```{r write_to_drive}
+summary <- principe %>% 
+  group_by(year(date), month(date)) %>% 
+  tally() %>% 
+  ungroup() %>% 
+  rename("Year" = `year(date)`,
+         "Month" = `month(date)`,
+         "Total observations" = "n")
+
+googlesheets4::write_sheet(data = summary,  
+                           ss = "1e6_LeSP9LjDBFSKvcCbM3yoUhLOCSK2_SqmkoAl7nzo",
+                           sheet = "Sheet1")
+```
+
+Or we can export this as a .csv file:
+
+```{r}
+write_csv(x = summary, file = "data/summary.csv")
+```
+
+# Cleaning data
+
+Most of the time our data is not tidy. We need to fix that while we preserve
+our raw data file
+```{r cleaning_data}
+principe_dirty <- read_csv("data/tropi_dry_principe_tower.csv") 
+
+principe_dirty %>% 
+  clean_names() %>% 
+  tidyr::separate(col = date_time, into = c("date", "time"), sep = " ") %>% 
+  dplyr::mutate(date = lubridate::ymd(date))
+```
+
+# Summary
+
+Let's do everything at almost once
+
+```{r all_together}
+prepare_examples()
+
+files <- dir_ls(path = "data", glob = "data/principe_*")
+
+principe <- files %>% 
+  map_dfr(read_csv, .id = "file_id")
+```
+
