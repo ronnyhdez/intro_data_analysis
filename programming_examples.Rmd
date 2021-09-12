@@ -70,7 +70,7 @@ principe <- files %>%
   map_dfr(~read_csv(.x))
 
 principe <- files %>% 
-  map_dfr(read_csv, .id = "check")
+  map_dfr(read_csv, .id = "file_id")
 ```
 
 We can many data file types. Even we can read file directly from our google 
@@ -85,6 +85,48 @@ principe_drive <- read_sheet("1e6_LeSP9LjDBFSKvcCbM3yoUhLOCSK2_SqmkoAl7nzo")
 We can not only read from google sheets, we can also write to a google sheet
 
 ```{r write_to_drive}
+summary <- principe %>% 
+  group_by(year(date), month(date)) %>% 
+  tally() %>% 
+  ungroup() %>% 
+  rename("Year" = `year(date)`,
+         "Month" = `month(date)`,
+         "Total observations" = "n")
 
+googlesheets4::write_sheet(data = summary,  
+                           ss = "1e6_LeSP9LjDBFSKvcCbM3yoUhLOCSK2_SqmkoAl7nzo",
+                           sheet = "Sheet1")
+```
+
+Or we can export this as a .csv file:
+
+```{r}
+write_csv(x = summary, file = "data/summary.csv")
+```
+
+# Cleaning data
+
+Most of the time our data is not tidy. We need to fix that while we preserve
+our raw data file
+```{r cleaning_data}
+principe_dirty <- read_csv("data/tropi_dry_principe_tower.csv") 
+
+principe_dirty %>% 
+  clean_names() %>% 
+  tidyr::separate(col = date_time, into = c("date", "time"), sep = " ") %>% 
+  dplyr::mutate(date = lubridate::ymd(date))
+```
+
+# Summary
+
+Let's do everything at almost once
+
+```{r all_together}
+prepare_examples()
+
+files <- dir_ls(path = "data", glob = "data/principe_*")
+
+principe <- files %>% 
+  map_dfr(read_csv, .id = "file_id")
 ```
 
