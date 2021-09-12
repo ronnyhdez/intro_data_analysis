@@ -17,12 +17,44 @@ the R programming language.
 
 ------------------------------------------------------------------------
 
+## Workshop requirements
+
+If you are new to R please install the following software (select
+according to your operating system)
+
+-   [RStudio Desktop
+    1.4.1717](https://www.rstudio.com/products/rstudio/download/#download)
+-   [The R programming language 4.1.1](https://cloud.r-project.org/)
+
+If you already have R and RStudio installed, please make sure you have
+the latest versions.
+
+Also, once you hace RStudio and R installed on your computer, open
+RStudio and in the console, copy and paste the following line of code:
+
+``` r
+install.packages(c("dplyr", "purrr", "janitor",
+                   "readr", "tidyr", "lubridate",
+                   "googlesheets4", "fs"))
+```
+
+**If a message box opens saying if you want to restart R, please say
+no!**
+
+It may take a while, but after the proces is finished, you should see
+the next message in your console:
+
+``` r
+The downloaded source packages are in
+    ‘/tmp/RtmpzvVuLv/downloaded_packages’
+```
+
 ## Workshop materials
 
-| Sesión                             | Slides                                                                                                                                                                   | Video                                         |
-|------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------|
-| 0-Preparación                      | No hay                                                                                                                                                                   | <https://www.youtube.com/watch?v=NCvJwJSMq60> |
-| 1- Introducción a las herramientas | [sesion\_01](https://github.com/ronnyhdez/curso_ciencia_datos_r/blob/main/presentaciones/Introducci%C3%B3n%20al%20an%C3%A1lisis%20y%20manejo%20de%20datos%20con%20R.pdf) | <https://www.youtube.com/watch?v=OI978h2y9-A> |
+| Sesión        | Slides                                                                                                                                                                   | Video                                         |
+|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------|
+| 0-Preparación | No hay                                                                                                                                                                   | <https://www.youtube.com/watch?v=NCvJwJSMq60> |
+| 1- Intro to R | [sesion\_01](https://github.com/ronnyhdez/curso_ciencia_datos_r/blob/main/presentaciones/Introducci%C3%B3n%20al%20an%C3%A1lisis%20y%20manejo%20de%20datos%20con%20R.pdf) | <https://www.youtube.com/watch?v=OI978h2y9-A> |
 
 ## Keep up with your learning journey
 
@@ -50,3 +82,5 @@ I’m a [RStudio certified
 trainer](https://education.rstudio.com/trainers/people/hernandez+ronny/)
 and if you want to know a little bit more about me, you can visit [my
 web page](http://ronnyhdez.rbind.io/)
+
+**You can also send me an email to <ronny.hernandezm@gmail.com>**
