@@ -1,0 +1,77 @@
+---
+title: "My analisys"
+author: "Ronny A. Hernández Mora"
+date: "14/09/2021"
+always_allow_html: yes
+output:
+  rmdformats::downcute:
+    code_folding: hide
+    fig_width: 12
+    fig_height: 8
+    use_bookdown: true
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+library(dplyr)
+library(readr)
+library(gt)
+library(ggplot2)
+library(janitor)
+library(lubridate)
+```
+
+## Read data
+
+```{r}
+principe_data <- read_csv("data/principe_2018.csv") %>% 
+  clean_names()
+```
+
+This report analize the data from the year **`r unique(year(principe_data$date))`** 
+
+## Summary table
+
+This is a summary for the `latent_heat_flux` variable from the Principe tower.
+
+```{r}
+principe_data %>% 
+  group_by(month(date)) %>% 
+  summarise(
+    max_lhf = max(latent_heat_flux, na.rm = TRUE),
+    mean_lhf = mean(latent_heat_flux, na.rm = TRUE),
+    min_lhf = min(latent_heat_flux, na.rm = TRUE)
+  ) %>% 
+  gt() %>% 
+  tab_header(
+    title = md("**Total months per year**"),
+    subtitle = ("For the principe tower data streams")
+  ) %>% 
+  tab_footnote(
+     footnote = "NA values were removed",
+     locations = cells_column_labels(
+       columns = c(max_lhf, mean_lhf, min_lhf)
+     )
+  )
+```
+
+## Plot
+
+This is the number of observations per month available for the Principe tower
+
+```{r}
+principe_data %>% 
+  group_by(zoo::as.yearmon(date)) %>% 
+  tally() %>% 
+  rename("date" = `zoo::as.yearmon(date)`, "total" = "n") %>% 
+  ggplot(aes(x = as.factor(date),
+             y = total, 
+             fill = as.factor(month(date)))) +
+  geom_bar(stat = "identity") +
+  scale_fill_viridis_d() +
+  theme_light(base_size = 21) +
+  labs(x = "Date", y = "Total observations", fill = "Month") +
+  theme(axis.text.x = element_text(angle = 70, h = 1))
+```
