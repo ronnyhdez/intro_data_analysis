@@ -62,8 +62,7 @@ The downloaded source packages are in
 
 | Sesión | Slides | Video |
 | ------ | ------------ | ----- |
-| 0-Preparación | No hay | https://www.youtube.com/watch?v=NCvJwJSMq60 |
-| 1- Intro to R | [sesion_01](https://github.com/ronnyhdez/curso_ciencia_datos_r/blob/main/presentaciones/Introducci%C3%B3n%20al%20an%C3%A1lisis%20y%20manejo%20de%20datos%20con%20R.pdf) | https://www.youtube.com/watch?v=OI978h2y9-A |
+| 1- Intro to R | [sesion_01](https://github.com/ronnyhdez/intro_data_analysis/blob/main/slides/01-intro_to_r.pdf) | Not available|
 
 ## Keep up with your learning journey
 
