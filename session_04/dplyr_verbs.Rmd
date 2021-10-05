@@ -1,0 +1,92 @@
+---
+title: "Principe tower exploration"
+author: "Ronny A. Hernández Mora"
+date: "05/10/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Libraries
+library(dplyr)
+library(readr)
+library(janitor)
+library(tidyr)
+library(lubridate)
+```
+
+## Data import
+
+```{r}
+principe <- read_csv("data/tropi_dry_principe_tower.csv") %>% 
+  clean_names()
+
+# principe_clean <- principe %>% 
+#   clean_names()
+```
+
+
+## Dplyr verbs
+
+```{r}
+## Select
+principe_selected <- principe %>% 
+  select(date_time, sensible_heat_flux)
+
+principe_average <- principe %>% 
+  select(starts_with("average"))
+
+principe_average <- principe %>% 
+  select(starts_with("average") | starts_with("mean"))
+
+
+principe_object <- principe %>% 
+  select(sensible_heat_flux) %>% 
+  pull()
+```
+
+```{r}
+## Filter
+principe_filter <- principe %>% 
+  filter(latent_heat_flux > 2000) %>% 
+  # select(latent_heat_flux) %>% 
+  filter(air_temperature < 10)
+
+principe_filter <- principe %>% 
+  filter(latent_heat_flux > 2000 | air_temperature < 10)
+```
+
+
+```{r}
+## Mutate
+
+principe_mutate <- principe %>% 
+  mutate(air_wrong = ifelse(air_temperature > 10, "ok", "wrong")) %>% 
+  select(air_temperature, air_wrong)
+
+
+principe_mutate <- principe %>% 
+  mutate(new_variable = air_temperature  + humidity)
+```
+
+```{r}
+# group_by
+# summarise
+
+# lubridate
+# tidyr
+
+air_temperature_average <- principe %>% 
+  separate(col = date_time, into = c("date", "time"), sep = " ") %>% 
+  mutate(date = ymd(date),
+         time = hms(time)) %>% 
+  group_by(month(date)) %>% 
+  summarise(
+    mean_air_temperature = mean(air_temperature, na.rm = TRUE)
+  ) %>% 
+  rename("month" = `month(date)`)
+```
+
