@@ -1,0 +1,53 @@
+---
+title: "My examples for Rmarkdown"
+author: "Ronny A. Hernández Mora"
+date: "28/09/2021"
+output: "html_document"
+params:
+  species:
+  color:  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(dplyr)
+library(ggplot2)
+library(janitor)
+```
+
+##  Import data
+
+This is were I import my data
+
+```{r creation_iris, echo = FALSE}
+data_iris <- iris
+```
+
+## Data exploration
+
+```{r check_data}
+glimpse(data_iris)
+```
+
+## Clean data
+
+```{r clean_iris}
+data_iris <- data_iris %>% 
+  clean_names()
+```
+
+# Plot data `r params$species`
+
+```{r point_plot}
+data_iris %>% 
+  filter(species == params$species) %>% 
+  ggplot(aes(x = sepal_length, y = sepal_width)) +
+  geom_point() +
+  theme_light(base_size = 16)
+```
+
+
+
+
+
