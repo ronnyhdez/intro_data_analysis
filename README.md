@@ -51,11 +51,13 @@ The downloaded source packages are in
 
 ## Workshop materials
 
-| Sesión                            | Slides                                                                                                    | Video         |
-|-----------------------------------|-----------------------------------------------------------------------------------------------------------|---------------|
-| 1- Intro to R                     | [sesion\_01](https://github.com/ronnyhdez/intro_data_analysis/blob/main/slides/01-intro_to_r.pdf)         | Not available |
-| 2- Data types and structures in R | [sesion\_02](https://github.com/ronnyhdez/intro_data_analysis/blob/main/slides/02-data_structures.pdf)    | Not available |
-| 3- Intro to Rmarkdown             | [sesion\_03](https://github.com/ronnyhdez/intro_data_analysis/blob/main/slides/03-intro_to_rmarkdown.pdf) | Not available |
+| Sesión                            | Slides                                                                                                      | Video         |
+|-----------------------------------|-------------------------------------------------------------------------------------------------------------|---------------|
+| 1- Intro to R                     | [sesion\_01](https://github.com/ronnyhdez/intro_data_analysis/blob/main/slides/01-intro_to_r.pdf)           | Not available |
+| 2- Data types and structures in R | [sesion\_02](https://github.com/ronnyhdez/intro_data_analysis/blob/main/slides/02-data_structures.pdf)      | Not available |
+| 3- Intro to Rmarkdown             | [sesion\_03](https://github.com/ronnyhdez/intro_data_analysis/blob/main/slides/03-intro_to_rmarkdown.pdf)   | Not available |
+| 4- Tidy data with dplyr           | [sesion\_04](https://github.com/ronnyhdez/intro_data_analysis/blob/main/slides/04-tidy_data_with_dplyr.pdf) | Not available |
+| 5- Data wrangling with tidyr      | [sesion\_05](https://github.com/ronnyhdez/intro_data_analysis/blob/main/slides/05-tidy_data_and_dates.pdf)  | Not available |
 
 ## Keep up with your learning journey
 
