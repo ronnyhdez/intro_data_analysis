@@ -1,0 +1,161 @@
+---
+title: "Tidy data"
+author: "Ronny A. Hernández Mora"
+date: "12/10/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyr)
+library(janitor)
+library(readr)
+```
+
+
+# Create a data frame
+```{r}
+tidy_data <- data.frame(
+  course = c("mate", "mate", "art", "art","compu", "compu"),
+  date = c("2020-05-28", "2020-05-28", 
+           "2020-05-28", "2020-06-04", 
+           "2020-05-28", "2020-06-12"),
+  grade = c("excelente", "regular", "bueno",
+            "excelente", "regular", "bueno"),
+  students = c(34, 20, 28,
+               28, 24, 25)
+)
+```
+
+## Use functions `pivot_wider` and `pivot_longer`
+
+```{r}
+datos_desordenados <- tidy_data %>% 
+  pivot_wider(course, 
+              names_from = grade, 
+              values_from = students)
+```
+
+
+```{r}
+my_tidy_data <- datos_desordenados %>% 
+  pivot_longer(cols = c("excelente", "regular", "bueno"),
+               names_to = "grade",
+               values_to = "total_students")
+
+my_tidy_data <- datos_desordenados %>% 
+  pivot_longer(cols = -course,
+               names_to = "grade",
+               values_to = "total_students")
+```
+
+
+```{r}
+my_tidy_data %>% 
+  group_by(course) %>% 
+  summarise(
+    total = sum(total_students, na.rm = TRUE)
+  )
+```
+
+```{r}
+my_tidy_data %>% 
+  group_by(grade) %>% 
+  summarise(
+    total = sum(total_students, na.rm =TRUE)
+  )
+```
+
+
+## Separate and unite
+
+```{r}
+principe <- read_csv("data/tropi_dry_principe_tower.csv") %>% 
+  clean_names() %>% 
+  separate(col = date_time, into = c("date", "time"),
+           sep = " ")
+```
+
+
+```{r}
+principe_unite <- principe %>% 
+  unite(col = "new_column", date:time,  sep = ":")
+
+```
+
+# Join data frames
+
+```{r}
+tidy_data <- data.frame(
+  course = c("mate", "mate", "art", "art","compu", "compu"),
+  date = c("2020-05-28", "2020-05-28", 
+           "2020-05-28", "2020-06-04", 
+           "2020-05-28", "2020-06-12"),
+  grade = c("excelente", "regular", "bueno",
+            "excelente", "regular", "bueno"),
+  students = c(34, 20, 28,
+               28, 24, 25)
+)
+
+
+example_join <- data.frame(
+  course = c("mate", "art", "compu"),
+  grade = c("excelente", "regular", "bueno"),
+  professors = c(3, 2, 8)
+)
+
+
+example_antijoin <- data.frame(
+  course = c("mate", "art"),
+  grade = c("excelente", "regular"),
+  professors = c(3, 2)
+)
+```
+
+## Left join
+
+```{r}
+new_data_left <- left_join(tidy_data, example_join, by = "course")
+
+# Indicate join by two columns
+second_data_left <- left_join(tidy_data, example_join, by = c("course", "grade"))
+```
+
+## Rigth join
+
+```{r}
+new_data_rigth <- right_join(tidy_data, example_join, by = "course")
+
+# Indicate join by two columns
+second_data_right <- right_join(tidy_data, example_join, by = c("course", "grade"))
+```
+
+
+```{r}
+#  this have be true beacuase ...
+validation <- second_data_right %>% 
+  filter(course == "art", 
+         grade == "regular") %>% 
+  select(professors) %>% 
+  pull()
+
+validation == 2
+
+stopifnot(validation == 2)
+```
+
+
+## inner join
+
+```{r}
+second_data_inner <- inner_join(tidy_data, example_join, by = c("course", "grade"))
+```
+
+## anti join
+
+```{r}
+second_data_anti <- anti_join(tidy_data, example_join, by = c("course", "grade"))
+```
